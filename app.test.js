@@ -16,22 +16,22 @@ it('POST /signin', async () => {
 
 
 
+// Test Camille
+it("GET /detail/:etablissementId", async() => {
+  const res = await request(app).get("/detail/12345");
 
-
-
-
-
-
-
-
-
-
-
-
-//test camille (start ligne 31)
-
-
-
+  expect(res.statusCode).toBe(200);
+  expect(res.body.product).toEqual({
+      id: 12345,
+      name: 'Cafe Lovster',
+      siret: 87993983300015,
+      description: 'Restaurant spécialisé dans les lobster rolls.',
+      photos: ['photo01.jpg', 'photo02.jpg'],
+      adresse: '3/3 Bis Boulevard Carnot 59800 LILLE',
+      latitude: 50.637796,
+    longitude: 3.064871,
+  })
+})
 
 
 
