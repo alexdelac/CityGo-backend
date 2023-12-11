@@ -9,6 +9,6 @@ const userProSchema = mongoose.Schema({
     token: String,
 })
 
-const UserPro = mongoose.model('usersPro', userProSchema)
+const UserPro = mongoose.model('userspros', userProSchema)
 
 module.exports = UserPro
