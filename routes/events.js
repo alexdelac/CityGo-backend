@@ -4,6 +4,30 @@ const Event = require('../models/events');
 const Etablissement = require('../models/etablissements');
 const UserPro = require('../models/usersPro');
 
+// POST Récupération des évènements existants du UserPro
+router.post('/', (req, res) => {
+    UserPro.findOne({ token: req.body.token })
+    .then(userProData => {
+        console.log(userProData);
+        if (userProData) {
+            Etablissement.findOne({ proprietaire: userProData._id })
+            .then(etablissementData => {
+                console.log(etablissementData);
+                if (etablissementData) {
+                    Event.find({ etablissement: etablissementData._id })
+                    .then(eventsData => {
+                        console.log(eventsData);
+                        res.json({ result: true, events: eventsData })
+                    })
+                } else {
+                        res.json({ result: false, error: 'Aucun évènement trouvé'})
+                }
+            })
+        }
+    })
+})
+
+// POST Création d'un nouvel évènement 
 router.post('/create', (req, res) => {
     UserPro.findOne({ token: req.body.token })
     .then(userProData => {
