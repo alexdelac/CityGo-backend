@@ -4,7 +4,7 @@ const Event = require('../models/events');
 const Etablissement = require('../models/etablissements');
 const UserPro = require('../models/usersPro');
 
-// POST Récupération des évènements existants du UserPro
+// POST : Récupération des évènements existants du UserPro
 router.post('/', (req, res) => {
     UserPro.findOne({ token: req.body.token })
     .then(userProData => {
@@ -27,7 +27,7 @@ router.post('/', (req, res) => {
     })
 })
 
-// POST Création d'un nouvel évènement 
+// POST : Création d'un nouvel évènement 
 router.post('/create', (req, res) => {
     UserPro.findOne({ token: req.body.token })
     .then(userProData => {
@@ -58,6 +58,18 @@ router.post('/create', (req, res) => {
                 })
             } else {
                 res.json({result: false, error: 'Propriétaire non trouvé'})
+            }
+        })
+    })
+
+// DELETE : Suppression d'un évènement 
+    router.delete('/', (req, res) => {
+        Event.deleteOne({ _id: req.body._id })
+        .then(result => {
+            if (result.deletedCount > 0) {
+                res.json({ result: true, response: 'Event deleted from data base'});
+            } else {
+                res.json({ result: false, response: 'Event not found or already deleted'});               
             }
         })
     })
