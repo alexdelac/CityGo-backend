@@ -11,7 +11,10 @@ var usersRouter = require('./routes/users');
 var etablissementsRouter = require('./routes/etablissements');
 var eventsRouter = require('./routes/events');
 
+
 var app = express();
+const fileUpload = require('express-fileupload');
+app.use(fileUpload());
 const cors = require('cors');
 app.use(cors());
 app.use(logger('dev'));
