@@ -35,13 +35,8 @@ router.post('/create', (req, res)=>{
             description: req.body.description,
             photos: [],
             telephone: req.body.telephone,
-            localisation: {
-                adresse: req.body.adresse,
-                ville: req.body.ville,
-                codePostale: req.body.codePostale,
-                latitude: req.body.latitude,
-                longitude: req.body.longitude
-            }
+            adresse: req.body.adresse,
+            localisation: req.body.coord
          })
 
          newEtablissement.save()

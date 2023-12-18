@@ -1,12 +1,16 @@
 const mongoose = require('mongoose')
 
 const localisationSchema = mongoose.Schema({
-    adresse: String,
-    ville: String,
-    codePostale: Number,
-    latitude: Number,
-    longitude: Number,
+    type: {
+        type: String,
+        default: 'Point'
+    },
+    coordinates: {
+        type: [Number],
+        index: '2dsphere'
+    }
 })
+
 
 const etablissementsSchema = mongoose.Schema({
     name: String,
@@ -16,6 +20,7 @@ const etablissementsSchema = mongoose.Schema({
     description: String,
     photos: [String],
     telephone: String,
+    adresse: String,
     localisation: localisationSchema,
     
 })
