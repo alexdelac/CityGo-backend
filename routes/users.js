@@ -54,6 +54,7 @@ router.post('/signin', (req, res) => {
   });
 });
 
+//modification du mot de passe dun utilisateur
 router.put('/updatePassword', (req, res) => {
   if (!checkBody(req.body, ['token', 'oldPassword', 'newPassword', 'confirmPassword'])) {
     res.json({ result: false, error: 'Missing or empty fields' });
@@ -90,6 +91,60 @@ router.put('/updatePassword', (req, res) => {
     })
 });
 
+<<<<<<< HEAD
+//modification du mail et du pseudo de lutilisateur
+router.put('/updateInfo', (req, res) => {
+  if (!checkBody(req.body, ['token', 'pseudonyme', 'email'])) {
+    res.json({ result: false, error: 'Missing or empty fields' });
+    return;
+  }
+  User.findOne({ token: req.body.token })
+    .then(userData => {
+      if (userData) {
+
+        const updateFields = {
+          pseudonyme: req.body.pseudonyme,
+          email: req.body.email
+        };
+
+        User.updateOne(
+          { token: req.body.token },
+          { $set: updateFields },
+        ).then((responseData) => {
+          if (responseData.modifiedCount > 0) {
+            res.json({ result: true, message: 'Info changed' });
+          } else {
+            res.json({ result: false, error: 'Info could not be changed' });
+          }
+        }).catch(err => {
+          console.error(err);
+          res.json({ result: false, error: 'An error occurred during update' });
+        });
+      } else {
+        res.json({ result: false, error: 'User not found' });
+      }
+    })
+});
+
+//suppression du compte utilisateur
+router.delete('/deleteAccount', (req, res) => {
+  //res.json({result: true})
+  if (!checkBody(req.body, ['token'])) {
+    res.json({ result: false, error: 'Missing or empty fields' });
+    return;
+  }
+
+  User.deleteOne({ token: req.body.token })
+    .then((result) => {
+      if (result.deletedCount > 0) {
+        res.json({ result: true, message: 'Account deleted successfully' });
+      } else {
+        res.json({ result: false, error: 'Account not found or could not be deleted' });
+      }
+    })
+});
+
+=======
 
 router.post('/like', (req, res)=>{
   //recherche le document du user pour acceder au tableau liked
@@ -114,5 +169,6 @@ router.post('/like', (req, res)=>{
       }
     })
 })
+>>>>>>> a4589f3eb601696a6b2f11a49cd62c5a33ad648d
 
 module.exports = router;
