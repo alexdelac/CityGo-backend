@@ -97,6 +97,8 @@ router.post('/display', async (req, res) => {
 
         const etablissementIds = etablissements.map(etablissement => etablissement._id);
 
+        const user = await User.findOne({token: req.body.token})
+            
 
         const events = await Event.find({
             etablissement: { $in: etablissementIds },
@@ -104,7 +106,14 @@ router.post('/display', async (req, res) => {
             endTime: { $gte: currentDate },
         }).populate('etablissement'); // Utiliser populate pour récupérer les données de l'établissement associé à chaque événement
 
+        
+
         const formattedEvents = events.map(event =>{ 
+            let isLiked = false
+            if(user.liked.includes(event.etablissement._id)){
+                isLiked = true
+            }
+
             return {
             id: event._id,
             title: event.title,
@@ -120,10 +129,10 @@ router.post('/display', async (req, res) => {
                 telephone: event.etablissement.telephone,
                 adresse: event.etablissement.adresse,
                 photos: event.etablissement.photos,
-                localisation: event.etablissement.localisation
+                localisation: event.etablissement.localisation,
+                isLiked: isLiked
                 // Ajouter d'autres champs de l'établissement si nécessaire
             },
-           
         }});
 
         res.json({ result: true, data: formattedEvents });

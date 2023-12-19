@@ -2,6 +2,7 @@ var express = require('express');
 var router = express.Router();
 
 const UserPro = require('../models/usersPro')
+const User = require('../models/users')
 const Etablissement = require('../models/etablissements')
 const uniqid = require('uniqid');
 const cloudinary = require('cloudinary').v2;
@@ -92,6 +93,14 @@ router.put('/upload/:token', async (req, res) => {
       res.json({ result: false, error: resultMove });
     }
    });
+
+
+router.post('/favoris',async (req, res)=>{
+    
+    const user = await User.findOne({token: req.body.token}).populate('liked')
+     res.json({result: true, data: user})
+
+})
 
 
 
