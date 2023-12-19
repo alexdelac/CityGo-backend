@@ -98,6 +98,8 @@ router.put('/upload/:token', async (req, res) => {
 router.post('/favoris',async (req, res)=>{
     
     const user = await User.findOne({token: req.body.token}).populate('liked')
+
+
      res.json({result: true, data: user})
 
 })

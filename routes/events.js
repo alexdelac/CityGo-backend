@@ -114,6 +114,13 @@ router.post('/display', async (req, res) => {
                 isLiked = true
             }
 
+            const distance = haversineDistance(
+                latitude,
+                longitude,
+                event.etablissement.localisation.coordinates[1], // Latitude de l'établissement
+                event.etablissement.localisation.coordinates[0]  // Longitude de l'établissement
+            );
+
             return {
             id: event._id,
             title: event.title,
@@ -130,7 +137,8 @@ router.post('/display', async (req, res) => {
                 adresse: event.etablissement.adresse,
                 photos: event.etablissement.photos,
                 localisation: event.etablissement.localisation,
-                isLiked: isLiked
+                isLiked: isLiked,
+                distance: distance
                 // Ajouter d'autres champs de l'établissement si nécessaire
             },
         }});
@@ -142,6 +150,24 @@ router.post('/display', async (req, res) => {
         res.status(500).json({ result: false, error: 'Erreur serveur' });
     }
 });
+
+
+function haversineDistance(lat1, lon1, lat2, lon2) {
+    const R = 6371000; // Rayon moyen de la Terre en mètres
+
+    const dLat = (lat2 - lat1) * (Math.PI / 180);
+    const dLon = (lon2 - lon1) * (Math.PI / 180);
+
+    const a =
+        Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+        Math.cos(lat1 * (Math.PI / 180)) * Math.cos(lat2 * (Math.PI / 180)) * Math.sin(dLon / 2) * Math.sin(dLon / 2);
+
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+
+    const distance = R * c; // Distance en mètres
+
+    return Math.round(distance);
+}
 
 module.exports = router;
 
