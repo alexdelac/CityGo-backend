@@ -1,6 +1,6 @@
 var express = require('express');
 var router = express.Router();
-
+const mongoose = require('mongoose');
 const User = require('../models/users')
 const { checkBody } = require('../modules/checkBody');
 const uid2 = require('uid2');
@@ -91,6 +91,7 @@ router.put('/updatePassword', (req, res) => {
     })
 });
 
+<<<<<<< HEAD
 //modification du mail et du pseudo de lutilisateur
 router.put('/updateInfo', (req, res) => {
   if (!checkBody(req.body, ['token', 'pseudonyme', 'email'])) {
@@ -143,5 +144,31 @@ router.delete('/deleteAccount', (req, res) => {
     })
 });
 
+=======
+
+router.post('/like', (req, res)=>{
+  //recherche le document du user pour acceder au tableau liked
+  User.findOne({token: req.body.token})
+    .then(data=>{
+      //transforme l'etablissementId sous forme de string en object id pour la comparaison
+      const id =new mongoose.Types.ObjectId(req.body.etablissementId) 
+      //recherche si l'établissementId est présent dans le tableau liked
+      if(!data.liked.includes(id)){
+        //si non ajoute l'établissementId
+        User.updateOne({token: req.body.token}, {$push: {liked: id}})
+          .then(data=>{
+            console.log(data)
+            res.json({result: true, action: 'liked'})
+          })
+      } else {
+        //si oui supprime l'établissementId
+        User.updateOne({token: req.body.token}, {$pull: {liked: id}})
+        .then(data=>{
+          res.json({result: true, action: 'unliked'})
+        })
+      }
+    })
+})
+>>>>>>> a4589f3eb601696a6b2f11a49cd62c5a33ad648d
 
 module.exports = router;
