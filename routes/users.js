@@ -91,7 +91,7 @@ router.put('/updatePassword', (req, res) => {
     })
 });
 
-<<<<<<< HEAD
+
 //modification du mail et du pseudo de lutilisateur
 router.put('/updateInfo', (req, res) => {
   if (!checkBody(req.body, ['token', 'pseudonyme', 'email'])) {
@@ -144,7 +144,6 @@ router.delete('/deleteAccount', (req, res) => {
     })
 });
 
-=======
 
 router.post('/like', (req, res)=>{
   //recherche le document du user pour acceder au tableau liked
@@ -169,6 +168,5 @@ router.post('/like', (req, res)=>{
       }
     })
 })
->>>>>>> a4589f3eb601696a6b2f11a49cd62c5a33ad648d
 
 module.exports = router;

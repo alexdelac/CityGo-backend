@@ -3,6 +3,7 @@ var router = express.Router();
 
 const UserPro = require('../models/usersPro')
 const User = require('../models/users')
+const Event = require('../models/events');
 const Etablissement = require('../models/etablissements')
 const uniqid = require('uniqid');
 const cloudinary = require('cloudinary').v2;
@@ -99,8 +100,24 @@ router.post('/favoris',async (req, res)=>{
     
     const user = await User.findOne({token: req.body.token}).populate('liked')
 
+    //recherche les events en cours pour les établissements présent dans le tableau liked
+    const events = await Event.find({
+        etablissement: { $in: user.liked },
+        startTime: { $lte: new Date() },
+        endTime: { $gte: new Date() },
+    })
+    //transforme l'objet mongoose en objet javascript pour pouvoir ajouter une propriété
+    const userWithInProgress = user.toObject();
+    userWithInProgress.liked = userWithInProgress.liked.map((etablissement) => {
+    // Utilisez some pour vérifier si l'ID de l'établissement est présent dans le tableau events
+      etablissement.inProgress = events.some((event) => event.etablissement.equals(etablissement._id));
+      return etablissement;
+    });
 
-     res.json({result: true, data: user})
+    console.log(userWithInProgress)
+
+
+     res.json({result: true, data: userWithInProgress })
 
 })
 
