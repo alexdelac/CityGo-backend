@@ -106,6 +106,9 @@ router.post('/display', async (req, res) => {
             endTime: { $gte: currentDate },
         }).populate('etablissement'); // Utiliser populate pour récupérer les données de l'établissement associé à chaque événement
 
+
+
+
         
 
         const formattedEvents = events.map(event =>{ 
@@ -150,6 +153,31 @@ router.post('/display', async (req, res) => {
         res.status(500).json({ result: false, error: 'Erreur serveur' });
     }
 });
+
+// GET : Récupération des évènements passés du UserPro
+router.get('/historical', (req, res) => {
+    UserPro.findOne({ token: req.body.token })
+        .then(userProData => {
+            if (userProData) {
+                Etablissement.findOne({ proprietaire: userProData._id })
+                    .then(etablissementData => {
+                        if (etablissementData) {
+                            const currentDate = new Date();
+                            Event.find({ etablissement: etablissementData._id, endTime: { $lte: currentDate } })
+                                .then(eventsData => {
+                                    res.json({ result: true, events: eventsData })
+                                })
+                        } else {
+                            res.json({ result: false, error: 'Aucun évènement trouvé' })
+                        }
+                    })
+            }else {
+                res.json({ result: false, error: 'Utilisateur non trouvé' })
+            }
+        })
+    
+})
+
 
 
 function haversineDistance(lat1, lon1, lat2, lon2) {
