@@ -90,7 +90,7 @@ router.post('/display', async (req, res) => {
                         type: 'Point',
                         coordinates: [longitude, latitude],
                     },
-                    $maxDistance: 1000, // 1 km
+                    $maxDistance: 5000, // 1 km
                 },
             },
         });
