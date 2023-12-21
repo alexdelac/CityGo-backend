@@ -15,7 +15,7 @@ router.post('/', (req, res) => {
                     .then(etablissementData => {
                         console.log(etablissementData);
                         if (etablissementData) {
-                            Event.find({ etablissement: etablissementData._id })
+                            Event.find({ etablissement: etablissementData._id, endTime: { $gte: new Date() } })
                                 .then(eventsData => {
                                     console.log(eventsData);
                                     res.json({ result: true, events: eventsData })
