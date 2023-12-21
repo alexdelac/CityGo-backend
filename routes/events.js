@@ -155,12 +155,14 @@ router.post('/display', async (req, res) => {
 });
 
 // GET : Récupération des évènements passés du UserPro
-router.get('/historical', (req, res) => {
+router.post('/historical', (req, res) => {
     UserPro.findOne({ token: req.body.token })
         .then(userProData => {
+            
             if (userProData) {
                 Etablissement.findOne({ proprietaire: userProData._id })
                     .then(etablissementData => {
+                        
                         if (etablissementData) {
                             const currentDate = new Date();
                             Event.find({ etablissement: etablissementData._id, endTime: { $lte: currentDate } })
