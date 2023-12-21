@@ -168,4 +168,13 @@ router.post('/like', (req, res)=>{
     })
 })
 
+router.post('/profile', (req, res)=>{
+  User.findOne({token: req.body.token})
+    .then(userData=>{
+      res.json({result: true, email: userData.email})
+    })
+})
+
+
+
 module.exports = router;

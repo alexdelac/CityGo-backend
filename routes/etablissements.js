@@ -54,17 +54,10 @@ router.put('/update', (req, res)=>{
     UserPro.findOne({token: req.body.token})
     .then(userData=>{
         Etablissement.updateOne({proprietaire: userData._id}, {name: req.body.name,
-            type: req.body.type,
+            
             siret: req.body.siret,
             description: req.body.description,
             telephone: req.body.telephone,
-            localisation: {
-                adresse: req.body.adresse,
-                ville: req.body.ville,
-                codePostale: req.body.codePostale,
-                latitude: req.body.latitude,
-                longitude: req.body.longitude
-            }
             })
         .then(data=>{
                 res.json({result: true, infos: data, user: {lastName: userData.lastName, firstName: userData.firstName, email: userData.email}})
